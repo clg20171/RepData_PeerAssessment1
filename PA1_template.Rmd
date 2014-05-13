@@ -1,7 +1,12 @@
 # Reproducible Research Peer Assessment 1
+
 ```{r}
+
 options(digits=2)
 opts_chunk$set(echo=TRUE)
+require(plyr)
+require(lattice)
+
 ```
 
 ## Loading and preprocessing the data
@@ -18,7 +23,6 @@ activityData <- read.csv("activity.csv",header=TRUE)
 
 ```{r}
 
-require(plyr)
 activitySummary <- ddply(activityData, .(date), summarize,
                        totalsteps = sum(steps, na.rm=TRUE))
                        
@@ -73,7 +77,9 @@ The 5 minute interval, averaged across all days, with the maximum number of step
 ### 1. Calculate and report the total number of missing values in the dataset
 
 ```{r}
+
 intervalNA <- sum(is.na(activityData$steps))
+
 ```
 
 The total number of intervals with missing step values is `r intervalNA`.
@@ -134,6 +140,9 @@ for (i in 1:nrow(replaceData)) {
 
 ```{r, fig.width=7, fig.height=6}
 
-require(lattice)
-par(mfrow=c(1,2))
-xyplot(steps ~ interval | weekday, data = replaceData, type = "l", layout = c(1,2))
+replaceSummary <- ddply(replaceData, .(interval, weekday), summarize,
+                       averagesteps = mean(steps))
+xyplot(averagesteps ~ interval | weekday, data = replaceSummary, type = "l", layout = c(1,2))
+
+```
+

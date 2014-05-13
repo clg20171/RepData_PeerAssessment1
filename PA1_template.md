@@ -1,8 +1,23 @@
 # Reproducible Research Peer Assessment 1
 
+
 ```r
+
 options(digits = 2)
 opts_chunk$set(echo = TRUE)
+require(plyr)
+```
+
+```
+## Loading required package: plyr
+```
+
+```r
+require(lattice)
+```
+
+```
+## Loading required package: lattice
 ```
 
 
@@ -22,14 +37,6 @@ activityData <- read.csv("activity.csv", header = TRUE)
 
 ```r
 
-require(plyr)
-```
-
-```
-## Loading required package: plyr
-```
-
-```r
 activitySummary <- ddply(activityData, .(date), summarize, totalsteps = sum(steps, 
     na.rm = TRUE))
 ```
@@ -95,6 +102,7 @@ The 5 minute interval, averaged across all days, with the maximum number of step
 
 
 ```r
+
 intervalNA <- sum(is.na(activityData$steps))
 ```
 
@@ -167,17 +175,11 @@ for (i in 1:nrow(replaceData)) {
 
 ```r
 
-require(lattice)
-```
-
-```
-## Loading required package: lattice
-```
-
-```r
-par(mfrow = c(1, 2))
-xyplot(steps ~ interval | weekday, data = replaceData, type = "l", layout = c(1, 
-    2))
+replaceSummary <- ddply(replaceData, .(interval, weekday), summarize, averagesteps = mean(steps))
+xyplot(averagesteps ~ interval | weekday, data = replaceSummary, type = "l", 
+    layout = c(1, 2))
 ```
 
 ![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
+
+
